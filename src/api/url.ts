@@ -9,6 +9,6 @@ export class UrlAPI {
     return `http://htmlweb.ru/geo/api.php?location=${location}&json&api_key=${API_KEY}`;
   }
   static regions(location: string) {
-    return `http://htmlweb.ru/geo/api.php?location=${location}&json&api_key=${API_KEY}`;
+    return `http://htmlweb.ru/geo/api.php?country=${location}&json&api_key=${API_KEY}`;
   }
 }

@@ -1,4 +1,71 @@
-<div>
-  {{dataValue | async | json}}
-</div>
-<router-outlet></router-outlet>
+<form [formGroup]="myForm" novalidate (ngSubmit)="submit()" >
+  <div class="form-group">
+    <label to="id">Id</label>
+    <input class="form-control" name="id" formControlName="id"/>
+    <div
+      class="alert alert-danger"
+      *ngIf="myForm.controls['id'].invalid && myForm.controls['id'].touched"
+    >
+      You didn't input a Name
+    </div>
+  </div>
+  <div class="form-group">
+    <label to="name">Name</label>
+    <input class="form-control" name="name" formControlName="name"/>
+    <div
+      class="alert alert-danger"
+      *ngIf="myForm.controls['name'].invalid && myForm.controls['name'].touched"
+    >
+      You didn't input a Name
+    </div>
+  </div>
+  <div class="form-group">
+    <label to="name">Date</label>
+    <input type="date" class="form-control" name="name" formControlName="date"/>
+    <div
+      class="alert alert-danger"
+      *ngIf="myForm.controls['date'].invalid && myForm.controls['date'].touched"
+    >
+      You didn't input a Date
+    </div>
+  </div>
+  <div class="form-group">
+    <label to="location">location</label>
+    <select class="form-control" name="location" formControlName="location">
+      <option *ngFor="let locationItem of locationsArray">{{locationItem}}</option>
+    </select>
+    <div
+      class="alert alert-danger"
+      *ngIf="myForm.controls['location'].invalid && myForm.controls['location'].touched"
+    >
+      You didn't input a Location
+    </div>
+  </div>
+  <fieldset class="form-group" [disabled]="myForm.controls['location'].invalid">
+    <label to="location">Country</label>
+    <select class="form-control" name="location" formControlName="country">
+      <option *ngFor="let countriesItem of countriesArray">{{countriesItem}}</option>
+    </select>
+    <div
+      class="alert alert-danger"
+      *ngIf="myForm.controls['country'].invalid && myForm.controls['country'].touched"
+    >
+      You didn't input a Country
+    </div>
+  </fieldset>
+
+  <div class="form-group">
+    <button type="button" class="btn btn-primary" [disabled]="myForm.invalid">
+      Отправить
+    </button>
+  </div>
+</form>
+{{monitor | async | json}}
+<!--<ng-content-->
+<!--  *ngTemplateOutlet="itemTemplate; context:{$implicit:'kkk'}"-->
+<!--&gt;</ng-content>-->
+<!--<ng-template #itemTemplate let-item>-->
+<!--  <a href="#" [innerHTML]="item">{{item}}</a>-->
+<!--  <hr/>-->
+<!--  <span>{{item}}</span>-->
+<!--</ng-template>-->
