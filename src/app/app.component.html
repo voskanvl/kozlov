@@ -44,7 +44,7 @@
   <fieldset class="form-group" [disabled]="myForm.controls['location'].invalid">
     <label to="location">Country</label>
     <select class="form-control" name="location" formControlName="country">
-      <option *ngFor="let countriesItem of countriesArray">{{countriesItem['name']}}</option>
+      <option *ngFor="let countriesItem of countriesArray" [value]="countriesItem['id']">{{countriesItem['name']}}</option>
     </select>
     <div
       class="alert alert-danger"
@@ -56,7 +56,7 @@
   <fieldset class="form-group" [disabled]="myForm.controls['country'].invalid">
     <label to="location">Region</label>
     <select class="form-control" name="location" formControlName="region">
-      <option *ngFor="let regionsItem of regionsArray">{{regionsItem}}</option>
+      <option *ngFor="let regionsItem of regionsArray" [value]="regionsItem['id']" >{{regionsItem['name']}}</option>
     </select>
     <div
       class="alert alert-danger"

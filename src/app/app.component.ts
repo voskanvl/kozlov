@@ -3,7 +3,7 @@ import {MainViewModel} from "./data.model"
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {concatMap, map, mergeMap, Observable, of, switchMap, tap} from "rxjs";
 import {MockdataService} from "./mockdata.service";
-import {MyFunctions} from "../functions/Functions";
+import {MyFunctions, Obj} from "../functions/Functions";
 
 @Component({
   selector: 'app-root',
@@ -23,8 +23,8 @@ Season - сезон (чекбокс со значениями зима, весн
 IsArchive - признак архивности (переключатель в архиве, не в архиве)
  */
   locationsArray: Array<string | number> = [];
-  countriesArray: Array<{ [key: string]: any }> = [];
-  regionsArray: Array<string | number> = [];
+  countriesArray: Array<Obj> = [];
+  regionsArray: Array<Obj> = [];
 
   isCountryDisabled = true;
   monitor = new Observable();
@@ -48,9 +48,10 @@ IsArchive - признак архивности (переключатель в �
 
   changeForm(v: any) {
     console.log(v, this.myForm.controls['location'].invalid, this.myForm.controls['country'].disabled)
+    if ('location' in v) this.data.getCountries(v['location']).subscribe(v => this.countriesArray = v)
+    if ('country' in v) this.data.getRegions(v['country']).subscribe(v => this.regionsArray = v)
+    console.log(this.regionsArray)
   }
-
-
 
   ngOnInit() {
     let previousValue = {}
