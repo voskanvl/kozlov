@@ -44,13 +44,25 @@
   <fieldset class="form-group" [disabled]="myForm.controls['location'].invalid">
     <label to="location">Country</label>
     <select class="form-control" name="location" formControlName="country">
-      <option *ngFor="let countriesItem of countriesArray">{{countriesItem}}</option>
+      <option *ngFor="let countriesItem of countriesArray">{{countriesItem['name']}}</option>
     </select>
     <div
       class="alert alert-danger"
       *ngIf="myForm.controls['country'].invalid && myForm.controls['country'].touched"
     >
       You didn't input a Country
+    </div>
+  </fieldset>
+  <fieldset class="form-group" [disabled]="myForm.controls['country'].invalid">
+    <label to="location">Region</label>
+    <select class="form-control" name="location" formControlName="region">
+      <option *ngFor="let regionsItem of regionsArray">{{regionsItem}}</option>
+    </select>
+    <div
+      class="alert alert-danger"
+      *ngIf="myForm.controls['region'].invalid && myForm.controls['region'].touched"
+    >
+      You didn't input a Region
     </div>
   </fieldset>
 
