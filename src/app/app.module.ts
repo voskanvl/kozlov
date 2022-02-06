@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import {FormsModule} from "@angular/forms";
 import { AppComponent } from './app.component';
-import {DataServiceService} from "./data-service.service";
+import {DataService} from "./data-service.service";
 import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
@@ -17,7 +17,7 @@ import {HttpClientModule} from "@angular/common/http";
     FormsModule,
     HttpClientModule
   ],
-  providers: [DataServiceService],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

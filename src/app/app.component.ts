@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {IDataService} from "./data-service.service";
+import {DataService} from "./data-service.service";
 import {Observable} from "rxjs";
 
 @Component({
@@ -10,8 +10,9 @@ import {Observable} from "rxjs";
 export class AppComponent implements OnInit{
   title = 'kozlov';
   dataValue = new Observable;
-  constructor(private data: IDataService) {
+  constructor(private data: DataService) {
   }
   ngOnInit() {
+    this.dataValue = this.data.getLocations();
   }
 }
