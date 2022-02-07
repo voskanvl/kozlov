@@ -22,4 +22,11 @@ export class MyFunctions{
     })
     return res;
   }
+  static getIdByName(arr:Array<Obj>,name:any):any{
+    for(let e of arr){
+      if('name' in e){
+        if (e['name']===name) return e['id']
+      }
+    }
+  }
 }

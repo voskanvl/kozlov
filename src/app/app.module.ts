@@ -6,17 +6,23 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { AppComponent } from './app.component';
 import {DataService} from "./data-service.service";
 import {HttpClientModule} from "@angular/common/http";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TypeAheadComponent } from './type-ahead/type-ahead.component';
+import {TypeAheadDependentComponent} from "./type-ahead-dependent/type-ahead.component";
 
 @NgModule({
   declarations: [
     AppComponent,
+    TypeAheadComponent,
+    TypeAheadDependentComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]

@@ -1,13 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {MainViewModel} from "./data.model"
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {concatMap, map, mergeMap, Observable, of, switchMap, tap} from "rxjs";
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  Observable,
+  OperatorFunction,
+} from "rxjs";
 import {MockdataService} from "./mockdata.service";
-import {MyFunctions, Obj} from "../functions/Functions";
+import {Obj} from "../functions/Functions";
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  templateUrl: './app.component-alt.html',
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent implements OnInit {
@@ -26,7 +32,7 @@ IsArchive - признак архивности (переключатель в �
   countriesArray: Array<Obj> = [];
   regionsArray: Array<Obj> = [];
 
-  isCountryDisabled = true;
+
   monitor = new Observable();
   mainViewModel = new MainViewModel();
   myForm = new FormGroup({
@@ -43,26 +49,41 @@ IsArchive - признак архивности (переключатель в �
   submit() {
   }
 
+  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 2 ? []
+        : this.countriesArray.map(e => e['name']).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    )
+
+  searchLocation: OperatorFunction<string, (string | number)[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term =>  this.locationsArray.filter(v => String(v).toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    )
   constructor(public data: MockdataService) {
   }
 
   changeForm(v: any) {
     console.log(v, this.myForm.controls['location'].invalid, this.myForm.controls['country'].disabled)
-    if ('location' in v) this.data.getCountries(v['location']).subscribe(v => this.countriesArray = v)
-    if ('country' in v) this.data.getRegions(v['country']).subscribe(v => this.regionsArray = v)
-    console.log(this.regionsArray)
+    if ('location' in v) this.data.getCountries(v['location']).subscribe(v => {
+      this.countriesArray = v;
+    })
   }
 
   ngOnInit() {
-    let previousValue = {}
-    const changedForm$ = this.myForm.valueChanges.pipe(map(v => {
-      const delta = MyFunctions.compareObjects(previousValue, v);
-      previousValue = v;
-      return delta;
-    }))
-    changedForm$.subscribe(this.changeForm.bind(this))
-    // this.monitor = this.data.getLocations();
     this.data.getLocations().subscribe(v => this.locationsArray = v)
-    // this.data.getCountries().subscribe(v=>this.countriesArray=v)
+    this.myForm.controls['location'].valueChanges.subscribe(
+      v=>{
+        console.log(v)
+        console.log(this.myForm.controls['location'])
+        return this.data.getCountries(v).subscribe(data=>this.countriesArray=data)
+      }
+    )
+    this.myForm.controls['country'].valueChanges.subscribe(
+      v=>this.data.getRegions(v).subscribe(data=>this.regionsArray=data)
+    )
   }
 }

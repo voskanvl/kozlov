@@ -1,4 +1,4 @@
-<form [formGroup]="myForm" novalidate (ngSubmit)="submit()" >
+<form [formGroup]="myForm" novalidate (ngSubmit)="submit()" class="form">
   <div class="form-group">
     <label to="id">Id</label>
     <input class="form-control" name="id" formControlName="id"/>
@@ -29,11 +29,30 @@
       You didn't input a Date
     </div>
   </div>
+
+<!--  <app-type-ahead-->
+<!--    [control]="myForm.controls['location']"-->
+<!--    [controlId]="'location'"-->
+<!--    [arr]="locationsArray"-->
+<!--    typeArr="string">-->
+<!--  </app-type-ahead>-->
+<!--  <div class="form-group">-->
+<!--    <label to="location">location</label>-->
+<!--    <select class="form-control" name="location" formControlName="location">-->
+<!--      <option *ngFor="let locationItem of locationsArray">{{locationItem}}</option>-->
+<!--    </select>-->
+<!--    <div-->
+<!--      class="alert alert-danger"-->
+<!--      *ngIf="myForm.controls['location'].invalid && myForm.controls['location'].touched"-->
+<!--    >-->
+<!--      You didn't input a Location-->
+<!--    </div>-->
+<!--  </div>-->
   <div class="form-group">
     <label to="location">location</label>
-    <select class="form-control" name="location" formControlName="location">
-      <option *ngFor="let locationItem of locationsArray">{{locationItem}}</option>
-    </select>
+    <input class="form-control" name="location" formControlName="location" [ngbTypeahead]="searchLocation"/>
+<!--      <option *ngFor="let locationItem of locationsArray">{{locationItem}}</option>-->
+<!--    </select>-->
     <div
       class="alert alert-danger"
       *ngIf="myForm.controls['location'].invalid && myForm.controls['location'].touched"
@@ -41,22 +60,34 @@
       You didn't input a Location
     </div>
   </div>
-  <fieldset class="form-group" [disabled]="myForm.controls['location'].invalid">
-    <label to="location">Country</label>
-    <select class="form-control" name="location" formControlName="country">
-      <option *ngFor="let countriesItem of countriesArray" [value]="countriesItem['id']">{{countriesItem['name']}}</option>
-    </select>
-    <div
-      class="alert alert-danger"
-      *ngIf="myForm.controls['country'].invalid && myForm.controls['country'].touched"
-    >
-      You didn't input a Country
-    </div>
-  </fieldset>
+<!--  <app-type-ahead [arr]="countriesArray" [disabledBy]="'location'" [formControlName]="'country'"-->
+<!--                  [myForm]="myForm"></app-type-ahead>-->
+    <fieldset class="form-group" [disabled]="myForm.controls['location'].invalid">
+      <label to="location">Country</label>
+      <input [ngbTypeahead]="search" name="country" formControlName="country">
+      <div
+        class="alert alert-danger"
+        *ngIf="myForm.controls['country'].invalid && myForm.controls['country'].touched"
+      >
+        You didn't input a Country
+      </div>
+    </fieldset>
+    <fieldset class="form-group" [disabled]="myForm.controls['location'].invalid">
+      <label to="location">Country</label>
+      <select class="form-control" name="location" formControlName="country">
+        <option *ngFor="let countriesItem of countriesArray" [value]="countriesItem['id']">{{countriesItem['name']}}</option>
+      </select>
+      <div
+        class="alert alert-danger"
+        *ngIf="myForm.controls['country'].invalid && myForm.controls['country'].touched"
+      >
+        You didn't input a Country
+      </div>
+    </fieldset>
   <fieldset class="form-group" [disabled]="myForm.controls['country'].invalid">
     <label to="location">Region</label>
     <select class="form-control" name="location" formControlName="region">
-      <option *ngFor="let regionsItem of regionsArray" [value]="regionsItem['id']" >{{regionsItem['name']}}</option>
+      <option *ngFor="let regionsItem of regionsArray" [value]="regionsItem['id']">{{regionsItem['name']}}</option>
     </select>
     <div
       class="alert alert-danger"
