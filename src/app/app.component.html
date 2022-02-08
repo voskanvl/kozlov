@@ -1,25 +1,33 @@
 <form [formGroup]="myForm" class="form">
+  <!-- --- ID --- -->
   <app-type-ahead
     controlId="id"
     label="Id"
     [valueArray]="[]"
     [formControlName]="'id'"
     [control]="myForm.get('id')"
+    [placeholder]="'Insert your ID'"
     autocomplete="id"
   >
   </app-type-ahead>
+  <!-- --- NAME --- -->
   <app-type-ahead
     controlId="name"
     label="Name"
     [valueArray]="[]"
     [formControlName]="'name'"
     [control]="myForm.get('name')"
+    [placeholder]="'Insert your Name'"
     autocomplete="name"
   >
   </app-type-ahead>
+  <!-- --- DATE --- -->
   <div class="input-group date-picker">
     <input class="form-control" placeholder="yyyy-mm-dd"
-           name="dp" ngbDatepicker #d="ngbDatepicker">
+           name="dp" ngbDatepicker
+           #d="ngbDatepicker"
+           formControlName="date"
+           (click)="log(myForm.controls['date'])">
     <div class="input-group-append">
       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week"
@@ -32,15 +40,19 @@
       </button>
     </div>
   </div>
+  <!-- --- LOCATION --- -->
   <app-type-ahead
     controlId="location"
     label="Location"
     [valueArray]="locationsArray"
     [formControlName]="'location'"
     [control]="myForm.get('location')"
+    [placeholder]="locationsPlaceholder"
     autocomplete="on"
   >
   </app-type-ahead>
+
+  <!-- --- COUNTRIES --- -->
   <app-type-ahead
     controlId="country"
     label="Country"
@@ -48,36 +60,60 @@
     [formControlName]="'country'"
     [control]="myForm.get('country')"
     [dependent]="true"
+    [placeholder]="countriesPlaceholder"
     autocomplete="country"
   >
   </app-type-ahead>
-
+  <!-- --- REGIONS --- -->
   <fieldset class="form-group">
     <label>Region</label>
     <select class="form-select" name="select" formControlName="region" multiple>
       <option *ngFor="let region of regionsArray">{{region['name']}}</option>
     </select>
   </fieldset>
-  <fieldset class="card">
+  <!-- --- SEASONS --- -->
+  <fieldset class="card" formArrayName="season">
     <legend>Choose season</legend>
     <div class="card-body">
-    <span *ngFor="let i of seasons" class="form-check-inline">
-      <input class="form-check-input" type="checkbox" name="season">
-      <label>{{i}}</label>
+    <span
+      *ngFor="let i of $any(myForm.controls['season']).controls; let idx = index;"
+      class="form-check-inline"
+    >
+      <input
+        class="form-check-input"
+        type="checkbox"
+        name="season"
+        [formControlName]="idx"
+      >
+      <label>{{seasons[idx].ru}}</label>
     </span>
     </div>
   </fieldset>
+  <!-- --- IS ARCHIVE --- -->
   <fieldset class="card" >
     <legend>Choose archive status</legend>
     <div class="card-body">
       <div class="form-check">
-        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="isArchive"
+          formControlName="isArchive"
+          value="isArchive"
+        >
         <label class="form-check-label" >
           is Archive
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+        <input
+          class="form-check-input"
+          type="radio"
+          name="isArchive"
+          formControlName="isArchive"
+          value="isn'tArchive"
+          checked
+        >
         <label class="form-check-label" >
           is no Archive
         </label>

@@ -38,4 +38,11 @@ export class MyFunctions{
       return e.toString()
     })
   }
+  static objectedDate(date: Date):object{
+    return ({
+      year: date.getFullYear(),
+      month: date.getMonth(),
+      day: date.getDay()
+  })
+  }
 }

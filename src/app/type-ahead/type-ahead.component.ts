@@ -26,6 +26,7 @@ export class TypeAheadComponent implements OnInit, ControlValueAccessor {
   @Input() errorMessage: string = "Wrong input data"
   @Input() control: AbstractControl | null = null
   @Input() dependent: boolean = false
+  @Input() placeholder: string = "Loading..."
 
   @ViewChild('instance', {static: true}) instance: NgbTypeahead|null = null;
 
