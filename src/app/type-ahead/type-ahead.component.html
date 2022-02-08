@@ -1,22 +1,22 @@
 <fieldset class="form-group type-ahead" [disabled]="disabled">
   <label >{{label}}</label>
-  <div class="row">
-  <input
-    [ngClass]="{'form-control': true, 'invalid':control!.invalid && control!.touched}"
-    [autocomplete]="autocomplete"
-    [ngbTypeahead]="search"
-    [name]="controlId"
-    [(ngModel)]="value"
-    (change)="onChange($any($event).target.value)"
-    (click)="click$.next($any($event).target.value)"
-    (focus)="focus$.next($any($event).target.value)"
-    (blur)="blur$.next($any($event).target.value)"
-    (selectItem)="onChange($event.item)"
-    [placeholder]="placeholder"
-    #instance="ngbTypeahead"
-  />
-  <div class="alert alert-danger" *ngIf="control!.invalid && control!.touched">
-      {{errorMessage}}
-  </div>
+  <div [ngClass]="{'row':true, 'hidden':control!.invalid && control!.touched}">
+    <input
+      class="form-control"
+      [autocomplete]="autocomplete"
+      [ngbTypeahead]="search"
+      [name]="controlId"
+      [(ngModel)]="value"
+      (change)="onChange($any($event).target.value)"
+      (click)="click$.next($any($event).target.value)"
+      (focus)="focus$.next($any($event).target.value)"
+      (blur)="blur$.next($any($event).target.value)"
+      (selectItem)="onChange($event.item)"
+      [placeholder]="placeholder"
+      #instance="ngbTypeahead"
+    />
+    <div [ngClass]="{'alert':true, 'alert-danger':true}">
+        {{errorMessage}}
+    </div>
   </div>
 </fieldset>

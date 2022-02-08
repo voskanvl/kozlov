@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {MainViewModel} from "./data.model"
 import {
   AbstractControl,
   FormArray,
@@ -11,15 +10,9 @@ import {
 } from "@angular/forms";
 import {
   BehaviorSubject,
-  debounceTime,
-  distinctUntilChanged, firstValueFrom,
-  map,
-  Observable,
-  OperatorFunction, Subject,
 } from "rxjs";
 import {MockdataService} from "./mockdata.service";
 import {MyFunctions, Obj} from "../functions/Functions";
-import {tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-root',
@@ -67,7 +60,6 @@ IsArchive - признак архивности (переключатель в �
   countriesPlaceholder = this.LOADING
   regionsPlaceholder = this.LOADING
 
-  countryDataLoaded$ = new BehaviorSubject("empty")
 
   validateLocation(): ValidatorFn {
 
@@ -81,18 +73,14 @@ IsArchive - признак архивности (переключатель в �
     console.log(d)
   }
 
-  validateCountry =  (control: AbstractControl): ValidationErrors | null => {
+  validateCountry = (control: AbstractControl): ValidationErrors | null => {
     const includes = this.countriesArray.map(e => e['name']).includes(control.value);
-    return includes?null:{v:1}
+    return includes ? null : {v: 1}
   }
 
-  // validateSeason
-
-
-  mainViewModel = new MainViewModel();
   myForm = new FormGroup({
-    id: new FormControl(this.mainViewModel.Id, Validators.required),
-    name: new FormControl(this.mainViewModel.Name, Validators.required),
+    id: new FormControl("", Validators.required),
+    name: new FormControl("", Validators.required),
     date: new FormControl(MyFunctions.objectedDate(new Date(Date.now())), [Validators.required]),
     location: new FormControl(null, [Validators.required, this.validateLocation()]),
     country: new FormControl({value: null, disabled: true}, [this.validateCountry]),
@@ -102,6 +90,7 @@ IsArchive - признак архивности (переключатель в �
   })
 
   submit() {
+    this.myForm.markAllAsTouched()
   }
 
   constructor(public data: MockdataService) {
@@ -130,7 +119,6 @@ IsArchive - признак архивности (переключатель в �
             this.countriesArray = data
             if (locationControl.valid) {
               this.countriesLoaded = true
-              this.countryDataLoaded$.next("loaded")
               this.countriesPlaceholder = this.LOADED
             }
           })

@@ -1,15 +1,39 @@
 .form-control
-  transition: width .5s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
-  &.invalid
-    box-shadow: 0 0 8px #f77
-    width: 50%
+  transition:  flex-basis .4s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
+  width: unset
+  flex: 1 1 99%
+
 .alert
   box-shadow: 0 0 8px #f77
   padding-top: .4rem
   padding-bottom: .4rem
+  overflow: hidden
+  padding: 0
+  flex: 0 0 0%
+  box-shadow: none
+  border: none
+  margin: 0
+  white-space: nowrap
+  text-align: center
+  line-height: 2.3
+
+
 label
   display: block
+
 
 .row
   margin-left: 0
   margin-right: 0
+  flex-wrap: nowrap
+  overflow: hidden
+  padding: .5rem
+  &.hidden
+    &>.form-control
+      flex: 1 1 70%
+      box-shadow: 0 0 8px #f77
+    &>.alert
+      flex: 1 1
+
+
+
