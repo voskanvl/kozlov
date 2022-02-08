@@ -9,7 +9,8 @@ import {
   OperatorFunction,
 } from "rxjs";
 import {MockdataService} from "./mockdata.service";
-import {Obj} from "../functions/Functions";
+import {MyFunctions, Obj} from "../functions/Functions";
+import {tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-root',
@@ -40,8 +41,8 @@ IsArchive - признак архивности (переключатель в �
     name: new FormControl(this.mainViewModel.Name, Validators.required),
     date: new FormControl(this.mainViewModel.Date, [Validators.required]),
     location: new FormControl(this.mainViewModel.Location, [Validators.required]),
-    country: new FormControl(this.mainViewModel.Country, [Validators.required]),
-    region: new FormControl(this.mainViewModel.Region, [Validators.required]),
+    country: new FormControl({value:this.mainViewModel.Country, disabled: true}, [Validators.required]),
+    region: new FormControl({value: this.mainViewModel.Region, disabled: true}, [Validators.required]),
     season: new FormControl(this.mainViewModel.Season, [Validators.required]),
     isArchive: new FormControl(this.mainViewModel.IsArchive, [Validators.required]),
   })
@@ -61,8 +62,9 @@ IsArchive - признак архивности (переключатель в �
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      map(term =>  this.locationsArray.filter(v => String(v).toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+      map(term => this.locationsArray.filter(v => String(v).toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     )
+
   constructor(public data: MockdataService) {
   }
 
@@ -76,14 +78,19 @@ IsArchive - признак архивности (переключатель в �
   ngOnInit() {
     this.data.getLocations().subscribe(v => this.locationsArray = v)
     this.myForm.controls['location'].valueChanges.subscribe(
-      v=>{
-        console.log(v)
+      v => {
+        if(this.myForm.controls['country'].disabled && this.myForm.controls['location'].valid )this.myForm.controls['country'].enable();
         console.log(this.myForm.controls['location'])
-        return this.data.getCountries(v).subscribe(data=>this.countriesArray=data)
+        return this.data.getCountries(v).subscribe(data => this.countriesArray = data)
       }
     )
     this.myForm.controls['country'].valueChanges.subscribe(
-      v=>this.data.getRegions(v).subscribe(data=>this.regionsArray=data)
+      v => {
+        console.log('this.myForm.controls[\'country\'].valueChanges',v)
+        if(this.myForm.controls['region'].disabled && this.myForm.controls['country'].valid)this.myForm.controls['region'].enable();
+        const id = MyFunctions.getIdByName(this.countriesArray, v)
+        return this.data.getRegions(id).subscribe(data => this.regionsArray = data)
+      }
     )
   }
 }

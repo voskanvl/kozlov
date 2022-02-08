@@ -1,0 +1,18 @@
+<fieldset class="form-group" [disabled]="disabled">
+  <label >{{label}}</label>
+  <input
+    [autocomplete]="autocomplete"
+    [ngbTypeahead]="search"
+    [name]="controlId"
+    [(ngModel)]="value"
+    (change)="onChange($any($event).target.value)"
+    (click)="click$.next($any($event).target.value)"
+    (focus)="focus$.next($any($event).target.value)"
+    (blur)="blur$.next($any($event).target.value)"
+    (selectItem)="onChange($event.item)"
+    #instance="ngbTypeahead"
+  />
+  <div class="alert alert-danger" *ngIf="control!.invalid && control!.touched">
+      {{errorMessage}}
+  </div>
+</fieldset>

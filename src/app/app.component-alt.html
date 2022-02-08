@@ -1,0 +1,34 @@
+<form [formGroup]="myForm">
+  <app-type-ahead
+    controlId="location"
+    label="Location"
+    [valueArray]="locationsArray"
+    [formControlName]="'location'"
+    [control]="myForm.get('location')"
+    autocomplete="on"
+  >
+  </app-type-ahead>
+  <app-type-ahead
+    controlId="country"
+    label="Country"
+    [valueArray]="countriesArray"
+    [formControlName]="'country'"
+    [control]="myForm.get('country')"
+    [dependent]="true"
+    autocomplete="country"
+  >
+  </app-type-ahead>
+<!--  <app-type-ahead-->
+<!--    controlId="region"-->
+<!--    label="Regions"-->
+<!--    [valueArray]="regionsArray"-->
+<!--    [formControlName]="'region'"-->
+<!--    [control]="myForm.get('region')"-->
+<!--    [dependent]="true"-->
+<!--    autocomplete="region"-->
+<!--  >-->
+<!--  </app-type-ahead>-->
+  <select class="form-select" name="select" formControlName="region" multiple>
+    <option *ngFor="let region of regionsArray">{{region['name']}}</option>
+  </select>
+</form>

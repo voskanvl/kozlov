@@ -29,4 +29,13 @@ export class MyFunctions{
       }
     }
   }
+  static stringArray(arr: string[] | number[] | Obj[], field?:string ): string[]{
+    return arr.map(e=>{
+      if (typeof e === 'object') {
+        if (field && field in e) return e[field]
+        return ""
+      }
+      return e.toString()
+    })
+  }
 }
