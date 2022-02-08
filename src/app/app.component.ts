@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MainViewModel} from "./data.model"
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
 import {
   debounceTime,
   distinctUntilChanged,
@@ -28,10 +28,18 @@ Country - страна (автокомплит)
 Region - регион (автокомплит)
 Season - сезон (чекбокс со значениями зима, весна, лето, осень, можно выбрать один или несколько сезонов)
 IsArchive - признак архивности (переключатель в архиве, не в архиве)
+
+
+Часть света, страна и регион берется из апи https://htmlweb.ru/geo/api_get_data.php. Возможно выбрать несколько регионов.
+Страна доступна после выбора части света, регион доступен после выбора страны.
+В форме должна быть валидация с подсветкой полей и выводом ошибок валидации под каждым полем, все поля обязательные для заполнения.
+Использовать сервисы и rxjs.
  */
   locationsArray: Array<string | number> = [];
   countriesArray: Array<Obj> = [];
   regionsArray: Array<Obj> = [];
+
+  seasons=['зима', 'весна', 'лето', 'осень']
 
 
   monitor = new Observable();
@@ -40,12 +48,20 @@ IsArchive - признак архивности (переключатель в �
     id: new FormControl(this.mainViewModel.Id, Validators.required),
     name: new FormControl(this.mainViewModel.Name, Validators.required),
     date: new FormControl(this.mainViewModel.Date, [Validators.required]),
-    location: new FormControl(this.mainViewModel.Location, [Validators.required]),
+    location: new FormControl(this.mainViewModel.Location, [Validators.required, this.validateLocation()]),
     country: new FormControl({value:this.mainViewModel.Country, disabled: true}, [Validators.required]),
     region: new FormControl({value: this.mainViewModel.Region, disabled: true}, [Validators.required]),
     season: new FormControl(this.mainViewModel.Season, [Validators.required]),
     isArchive: new FormControl(this.mainViewModel.IsArchive, [Validators.required]),
   })
+
+  validateLocation():ValidatorFn{
+    return (control: AbstractControl): ValidationErrors | null =>{
+      console.log('this.locationsArray.includes(control.value)',this.locationsArray.includes(control.value))
+      if (this.locationsArray.includes(control.value)) return null
+      return {mustBeIn:control.value}
+    }
+  }
 
   submit() {
   }
@@ -77,10 +93,13 @@ IsArchive - признак архивности (переключатель в �
 
   ngOnInit() {
     this.data.getLocations().subscribe(v => this.locationsArray = v)
-    this.myForm.controls['location'].valueChanges.subscribe(
+    this.myForm.controls['location'].valueChanges
+      .pipe(
+        tap(()=>console.log('this.myForm.controls[\'location\'].valid', this.myForm.controls['location'].valid))
+      )
+      .subscribe(
       v => {
         if(this.myForm.controls['country'].disabled && this.myForm.controls['location'].valid )this.myForm.controls['country'].enable();
-        console.log(this.myForm.controls['location'])
         return this.data.getCountries(v).subscribe(data => this.countriesArray = data)
       }
     )
