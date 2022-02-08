@@ -1,114 +1,88 @@
-<form [formGroup]="myForm" novalidate (ngSubmit)="submit()" class="form">
-  <div class="form-group">
-    <label to="id">Id</label>
-    <input class="form-control" name="id" formControlName="id"/>
-    <div
-      class="alert alert-danger"
-      *ngIf="myForm.controls['id'].invalid && myForm.controls['id'].touched"
-    >
-      You didn't input a Name
+<form [formGroup]="myForm" class="form">
+  <app-type-ahead
+    controlId="id"
+    label="Id"
+    [valueArray]="[]"
+    [formControlName]="'id'"
+    [control]="myForm.get('id')"
+    autocomplete="id"
+  >
+  </app-type-ahead>
+  <app-type-ahead
+    controlId="name"
+    label="Name"
+    [valueArray]="[]"
+    [formControlName]="'name'"
+    [control]="myForm.get('name')"
+    autocomplete="name"
+  >
+  </app-type-ahead>
+  <div class="input-group date-picker">
+    <input class="form-control" placeholder="yyyy-mm-dd"
+           name="dp" ngbDatepicker #d="ngbDatepicker">
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week"
+             viewBox="0 0 16 16">
+          <path
+            d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+          <path
+            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+        </svg>
+      </button>
     </div>
   </div>
-  <div class="form-group">
-    <label to="name">Name</label>
-    <input class="form-control" name="name" formControlName="name"/>
-    <div
-      class="alert alert-danger"
-      *ngIf="myForm.controls['name'].invalid && myForm.controls['name'].touched"
-    >
-      You didn't input a Name
-    </div>
-  </div>
-  <div class="form-group">
-    <label to="name">Date</label>
-    <input type="date" class="form-control" name="name" formControlName="date"/>
-    <div
-      class="alert alert-danger"
-      *ngIf="myForm.controls['date'].invalid && myForm.controls['date'].touched"
-    >
-      You didn't input a Date
-    </div>
-  </div>
+  <app-type-ahead
+    controlId="location"
+    label="Location"
+    [valueArray]="locationsArray"
+    [formControlName]="'location'"
+    [control]="myForm.get('location')"
+    autocomplete="on"
+  >
+  </app-type-ahead>
+  <app-type-ahead
+    controlId="country"
+    label="Country"
+    [valueArray]="countriesArray"
+    [formControlName]="'country'"
+    [control]="myForm.get('country')"
+    [dependent]="true"
+    autocomplete="country"
+  >
+  </app-type-ahead>
 
-<!--  <app-type-ahead-->
-<!--    [control]="myForm.controls['location']"-->
-<!--    [controlId]="'location'"-->
-<!--    [arr]="locationsArray"-->
-<!--    typeArr="string">-->
-<!--  </app-type-ahead>-->
-<!--  <div class="form-group">-->
-<!--    <label to="location">location</label>-->
-<!--    <select class="form-control" name="location" formControlName="location">-->
-<!--      <option *ngFor="let locationItem of locationsArray">{{locationItem}}</option>-->
-<!--    </select>-->
-<!--    <div-->
-<!--      class="alert alert-danger"-->
-<!--      *ngIf="myForm.controls['location'].invalid && myForm.controls['location'].touched"-->
-<!--    >-->
-<!--      You didn't input a Location-->
-<!--    </div>-->
-<!--  </div>-->
-  <div class="form-group">
-    <label to="location">location</label>
-    <input class="form-control" name="location" formControlName="location" [ngbTypeahead]="searchLocation"/>
-<!--      <option *ngFor="let locationItem of locationsArray">{{locationItem}}</option>-->
-<!--    </select>-->
-    <div
-      class="alert alert-danger"
-      *ngIf="myForm.controls['location'].invalid && myForm.controls['location'].touched"
-    >
-      You didn't input a Location
-    </div>
-  </div>
-<!--  <app-type-ahead [arr]="countriesArray" [disabledBy]="'location'" [formControlName]="'country'"-->
-<!--                  [myForm]="myForm"></app-type-ahead>-->
-    <fieldset class="form-group" [disabled]="myForm.controls['location'].invalid">
-      <label to="location">Country</label>
-      <input [ngbTypeahead]="search" name="country" formControlName="country">
-      <div
-        class="alert alert-danger"
-        *ngIf="myForm.controls['country'].invalid && myForm.controls['country'].touched"
-      >
-        You didn't input a Country
-      </div>
-    </fieldset>
-    <fieldset class="form-group" [disabled]="myForm.controls['location'].invalid">
-      <label to="location">Country</label>
-      <select class="form-control" name="location" formControlName="country">
-        <option *ngFor="let countriesItem of countriesArray" [value]="countriesItem['id']">{{countriesItem['name']}}</option>
-      </select>
-      <div
-        class="alert alert-danger"
-        *ngIf="myForm.controls['country'].invalid && myForm.controls['country'].touched"
-      >
-        You didn't input a Country
-      </div>
-    </fieldset>
-  <fieldset class="form-group" [disabled]="myForm.controls['country'].invalid">
-    <label to="location">Region</label>
-    <select class="form-control" name="location" formControlName="region">
-      <option *ngFor="let regionsItem of regionsArray" [value]="regionsItem['id']">{{regionsItem['name']}}</option>
+  <fieldset class="form-group">
+    <label>Region</label>
+    <select class="form-select" name="select" formControlName="region" multiple>
+      <option *ngFor="let region of regionsArray">{{region['name']}}</option>
     </select>
-    <div
-      class="alert alert-danger"
-      *ngIf="myForm.controls['region'].invalid && myForm.controls['region'].touched"
-    >
-      You didn't input a Region
+  </fieldset>
+  <fieldset class="card">
+    <legend>Choose season</legend>
+    <div class="card-body">
+    <span *ngFor="let i of seasons" class="form-check-inline">
+      <input class="form-check-input" type="checkbox" name="season">
+      <label>{{i}}</label>
+    </span>
     </div>
   </fieldset>
-
-  <div class="form-group">
-    <button type="button" class="btn btn-primary" [disabled]="myForm.invalid">
-      Отправить
-    </button>
-  </div>
+  <fieldset class="card" >
+    <legend>Choose archive status</legend>
+    <div class="card-body">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+        <label class="form-check-label" >
+          is Archive
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+        <label class="form-check-label" >
+          is no Archive
+        </label>
+      </div>
+    </div>
+  </fieldset>
+  <input type="submit" class="btn btn-primary"/>
 </form>
-{{monitor | async | json}}
-<!--<ng-content-->
-<!--  *ngTemplateOutlet="itemTemplate; context:{$implicit:'kkk'}"-->
-<!--&gt;</ng-content>-->
-<!--<ng-template #itemTemplate let-item>-->
-<!--  <a href="#" [innerHTML]="item">{{item}}</a>-->
-<!--  <hr/>-->
-<!--  <span>{{item}}</span>-->
-<!--</ng-template>-->

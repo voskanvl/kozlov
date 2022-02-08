@@ -3,10 +3,10 @@ import {MainViewModel} from "./data.model"
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
 import {
   debounceTime,
-  distinctUntilChanged,
+  distinctUntilChanged, firstValueFrom,
   map,
   Observable,
-  OperatorFunction,
+  OperatorFunction, Subject,
 } from "rxjs";
 import {MockdataService} from "./mockdata.service";
 import {MyFunctions, Obj} from "../functions/Functions";
@@ -14,7 +14,7 @@ import {tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component-alt.html',
+  templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent implements OnInit {
@@ -41,45 +41,51 @@ IsArchive - признак архивности (переключатель в �
 
   seasons=['зима', 'весна', 'лето', 'осень']
 
+  locationsArrayLoaded$ = new Subject()
+  countriesArrayLoaded$ = new Subject()
+  regionsArrayLoaded$ = new Subject()
 
-  monitor = new Observable();
   mainViewModel = new MainViewModel();
   myForm = new FormGroup({
     id: new FormControl(this.mainViewModel.Id, Validators.required),
     name: new FormControl(this.mainViewModel.Name, Validators.required),
     date: new FormControl(this.mainViewModel.Date, [Validators.required]),
-    location: new FormControl(this.mainViewModel.Location, [Validators.required, this.validateLocation()]),
-    country: new FormControl({value:this.mainViewModel.Country, disabled: true}, [Validators.required]),
-    region: new FormControl({value: this.mainViewModel.Region, disabled: true}, [Validators.required]),
+    location: new FormControl("Loading...", [Validators.required, this.validateLocation()]),
+    country: new FormControl({value:"Loading...", disabled: true}, [Validators.required,this.validateCountry]),
+    region: new FormControl({value: "Loading...", disabled: true}, [Validators.required]),
     season: new FormControl(this.mainViewModel.Season, [Validators.required]),
     isArchive: new FormControl(this.mainViewModel.IsArchive, [Validators.required]),
   })
 
   validateLocation():ValidatorFn{
     return (control: AbstractControl): ValidationErrors | null =>{
-      console.log('this.locationsArray.includes(control.value)',this.locationsArray.includes(control.value))
       if (this.locationsArray.includes(control.value)) return null
       return {mustBeIn:control.value}
     }
   }
+  async validateCountry(control: AbstractControl): Promise<ValidationErrors | null> {
+      if (this.countriesArray.includes(control.value)) return null
+      return {mustBeIn: control.value}
+  }
+
 
   submit() {
   }
-
-  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      map(term => term.length < 2 ? []
-        : this.countriesArray.map(e => e['name']).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-    )
-
-  searchLocation: OperatorFunction<string, (string | number)[]> = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      map(term => this.locationsArray.filter(v => String(v).toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-    )
+  //
+  // search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+  //   text$.pipe(
+  //     debounceTime(200),
+  //     distinctUntilChanged(),
+  //     map(term => term.length < 2 ? []
+  //       : this.countriesArray.map(e => e['name']).filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+  //   )
+  //
+  // searchLocation: OperatorFunction<string, (string | number)[]> = (text$: Observable<string>) =>
+  //   text$.pipe(
+  //     debounceTime(200),
+  //     distinctUntilChanged(),
+  //     map(term => this.locationsArray.filter(v => String(v).toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+  //   )
 
   constructor(public data: MockdataService) {
   }
@@ -92,7 +98,10 @@ IsArchive - признак архивности (переключатель в �
   }
 
   ngOnInit() {
-    this.data.getLocations().subscribe(v => this.locationsArray = v)
+    this.data.getLocations().subscribe(v => {
+      this.locationsArrayLoaded$.next("loaded")
+      this.locationsArray = v
+    })
     this.myForm.controls['location'].valueChanges
       .pipe(
         tap(()=>console.log('this.myForm.controls[\'location\'].valid', this.myForm.controls['location'].valid))
@@ -100,7 +109,10 @@ IsArchive - признак архивности (переключатель в �
       .subscribe(
       v => {
         if(this.myForm.controls['country'].disabled && this.myForm.controls['location'].valid )this.myForm.controls['country'].enable();
-        return this.data.getCountries(v).subscribe(data => this.countriesArray = data)
+        return this.data.getCountries(v).subscribe(data => {
+          this.countriesArrayLoaded$.next("loaded")
+          this.countriesArray = data
+        })
       }
     )
     this.myForm.controls['country'].valueChanges.subscribe(
@@ -108,7 +120,10 @@ IsArchive - признак архивности (переключатель в �
         console.log('this.myForm.controls[\'country\'].valueChanges',v)
         if(this.myForm.controls['region'].disabled && this.myForm.controls['country'].valid)this.myForm.controls['region'].enable();
         const id = MyFunctions.getIdByName(this.countriesArray, v)
-        return this.data.getRegions(id).subscribe(data => this.regionsArray = data)
+        return this.data.getRegions(id).subscribe(data => {
+          this.regionsArrayLoaded$.next("loaded")
+          this.regionsArray = data
+        })
       }
     )
   }
