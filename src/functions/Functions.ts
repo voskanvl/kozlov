@@ -39,10 +39,11 @@ export class MyFunctions{
     })
   }
   static objectedDate(date: Date):object{
-    return ({
+    const res = {
       year: date.getFullYear(),
-      month: date.getMonth(),
-      day: date.getDay()
-  })
+        month: date.getMonth()+1,
+        day: date.getDate()
+    }
+    return res
   }
 }

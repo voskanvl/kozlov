@@ -22,22 +22,24 @@
   >
   </app-type-ahead>
   <!-- --- DATE --- -->
-  <div class="input-group date-picker">
-    <input class="form-control" placeholder="yyyy-mm-dd"
-           name="dp" ngbDatepicker
-           #d="ngbDatepicker"
-           formControlName="date"
-           (click)="log(myForm.controls['date'])">
-    <div class="input-group-append">
-      <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week"
-             viewBox="0 0 16 16">
-          <path
-            d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
-          <path
-            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-        </svg>
-      </button>
+  <div class="date-wrap"><label>Date</label>
+    <div class="input-group date-picker">
+      <input class="form-control" placeholder="yyyy-mm-dd"
+             name="dp" ngbDatepicker
+             #d="ngbDatepicker"
+             formControlName="date"
+             (click)="log(myForm.controls['date'])">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-week"
+               viewBox="0 0 16 16">
+            <path
+              d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+            <path
+              d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
   <!-- --- LOCATION --- -->
@@ -67,7 +69,7 @@
   <!-- --- REGIONS --- -->
   <fieldset class="form-group">
     <label>Region</label>
-    <select class="form-select" name="select" formControlName="region" multiple>
+    <select class="form-select form-control" name="select" formControlName="region" multiple>
       <option *ngFor="let region of regionsArray">{{region['name']}}</option>
     </select>
   </fieldset>

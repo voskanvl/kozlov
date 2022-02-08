@@ -1,7 +1,8 @@
-<fieldset class="form-group" [disabled]="disabled">
+<fieldset class="form-group type-ahead" [disabled]="disabled">
   <label >{{label}}</label>
+  <div class="row">
   <input
-    class="form-control"
+    [ngClass]="{'form-control': true, 'invalid':control!.invalid && control!.touched}"
     [autocomplete]="autocomplete"
     [ngbTypeahead]="search"
     [name]="controlId"
@@ -16,5 +17,6 @@
   />
   <div class="alert alert-danger" *ngIf="control!.invalid && control!.touched">
       {{errorMessage}}
+  </div>
   </div>
 </fieldset>

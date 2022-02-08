@@ -49,10 +49,10 @@ IsArchive - признак архивности (переключатель в �
   regionsArray: Array<Obj> = [];
 
   seasons = [
-    {eng:'winter',ru:'зима'},
-    {eng:'spring', ru:'весна'},
-    {eng:'summer',ru:'лето'},
-    {eng: 'autumn', ru:'осень'}
+    {eng: 'winter', ru: 'зима'},
+    {eng: 'spring', ru: 'весна'},
+    {eng: 'summer', ru: 'лето'},
+    {eng: 'autumn', ru: 'осень'}
   ]
 
   private LOADING = "Loading..."
@@ -77,26 +77,16 @@ IsArchive - признак архивности (переключатель в �
     }
   }
 
-  log(d:any){
+  log(d: any) {
     console.log(d)
   }
 
-  validateCountry = async (control: AbstractControl): Promise<ValidationErrors | null> => {
-    return null
-    // return new Promise<ValidationErrors | null>(resolve => {
-    //   this.countryDataLoaded$.subscribe(v => {
-    //     const includes = this.countriesArray.map(e => e['name']).includes(control.value)
-    //     if (includes) {
-    //       resolve(null)
-    //     } else {
-    //       resolve({mustBeIn: control.value})
-    //     }
-    //   })
-    // })
+  validateCountry =  (control: AbstractControl): ValidationErrors | null => {
+    const includes = this.countriesArray.map(e => e['name']).includes(control.value);
+    return includes?null:{v:1}
   }
 
   // validateSeason
-
 
 
   mainViewModel = new MainViewModel();
@@ -105,29 +95,17 @@ IsArchive - признак архивности (переключатель в �
     name: new FormControl(this.mainViewModel.Name, Validators.required),
     date: new FormControl(MyFunctions.objectedDate(new Date(Date.now())), [Validators.required]),
     location: new FormControl(null, [Validators.required, this.validateLocation()]),
-    country: new FormControl({value: null, disabled: true}, [Validators.required, ]),
+    country: new FormControl({value: null, disabled: true}, [this.validateCountry]),
     region: new FormControl({value: null, disabled: true}, [Validators.required]),
-    // season: new FormControl(this.mainViewModel.Season, [Validators.required]),
-    season: new FormArray(this.seasons.map(e=>new FormControl(false))),
+    season: new FormArray(this.seasons.map(e => new FormControl(false))),
     isArchive: new FormControl("isn'tArchive", [Validators.required]),
   })
 
   submit() {
   }
 
-  constructor(public data: MockdataService
-  ) {
+  constructor(public data: MockdataService) {
   }
-
-  // changeForm(v
-  //              :
-  //              any
-  // ) {
-  //   console.log(v, this.myForm.controls['location'].invalid, this.myForm.controls['country'].disabled)
-  //   if ('location' in v) this.data.getCountries(v['location']).subscribe(v => {
-  //     this.countriesArray = v;
-  //   })
-  // }
 
   ngOnInit() {
     const dateControl = this.myForm.controls['date']
