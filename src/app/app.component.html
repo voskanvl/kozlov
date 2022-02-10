@@ -130,5 +130,5 @@
       <label class="custom-control-label" for="customSwitches">isArchive</label>
     </div>
   </fieldset>
-  <input type="submit" class="btn btn-primary" (click)="submit()"/>
+  <input type="submit" class="btn btn-primary" (click)="submit()" [disabled]="myForm.invalid"/>
 </form>
