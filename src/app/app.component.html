@@ -92,34 +92,42 @@
     </div>
   </fieldset>
   <!-- --- IS ARCHIVE --- -->
-  <fieldset class="card" >
+<!--  <fieldset class="card" >-->
+<!--    <legend>Choose archive status</legend>-->
+<!--    <div class="card-body">-->
+<!--      <div class="form-check">-->
+<!--        <input-->
+<!--          class="form-check-input"-->
+<!--          type="radio"-->
+<!--          name="isArchive"-->
+<!--          formControlName="isArchive"-->
+<!--          value="isArchive"-->
+<!--        >-->
+<!--        <label class="form-check-label" >-->
+<!--          is Archive-->
+<!--        </label>-->
+<!--      </div>-->
+<!--      <div class="form-check">-->
+<!--        <input-->
+<!--          class="form-check-input"-->
+<!--          type="radio"-->
+<!--          name="isArchive"-->
+<!--          formControlName="isArchive"-->
+<!--          value="isn'tArchive"-->
+<!--          checked-->
+<!--        >-->
+<!--        <label class="form-check-label" >-->
+<!--          is no Archive-->
+<!--        </label>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </fieldset>-->
+  <!-- Default switch -->
+  <fieldset class="card">
     <legend>Choose archive status</legend>
-    <div class="card-body">
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="isArchive"
-          formControlName="isArchive"
-          value="isArchive"
-        >
-        <label class="form-check-label" >
-          is Archive
-        </label>
-      </div>
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="isArchive"
-          formControlName="isArchive"
-          value="isn'tArchive"
-          checked
-        >
-        <label class="form-check-label" >
-          is no Archive
-        </label>
-      </div>
+    <div class="custom-control custom-switch card-body">
+      <input type="checkbox" class="custom-control-input" id="customSwitches" formControlName="isArchive">
+      <label class="custom-control-label" for="customSwitches">isArchive</label>
     </div>
   </fieldset>
   <input type="submit" class="btn btn-primary" (click)="submit()"/>
